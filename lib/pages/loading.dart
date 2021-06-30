@@ -8,13 +8,18 @@ class loading extends StatefulWidget {
 
 class _loadingState extends State<loading> {
 
-  //loading message
-  String out = "Loading";
+
 
 void setwordlTime() async{
   worldtime response =  worldtime(location: "Asia",flagimg: "sds",url: "Asia/Colombo");
   await response.getTime();
-  out = response.time;//asign time value to loading message string
+ Navigator.pushReplacementNamed(context, '/home',arguments: {
+
+    'location' : response.location,
+    'flagimg' : response.flagimg,
+    'time':response.time
+
+ });
 
 }
 
@@ -33,7 +38,7 @@ void setwordlTime() async{
 
       body: Padding(
         padding: EdgeInsets.all(50),
-        child: Text("$out"),
+        child: Text("Loading"),
       ),
 
 
