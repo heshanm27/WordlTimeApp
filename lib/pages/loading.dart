@@ -11,7 +11,7 @@ class _loadingState extends State<loading> {
 
 
 void setwordlTime() async{
-  worldtime response =  worldtime(location: "Asia",flagimg: "sds",url: "Asia/Colombo");
+  worldtime response =  worldtime(location: "Colombo",flagimg: "sds",url: "Asia/Colombo");
   await response.getTime();
  Navigator.pushReplacementNamed(context, '/home',arguments: {
 

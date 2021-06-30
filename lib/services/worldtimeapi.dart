@@ -1,5 +1,6 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 class worldtime{
 
@@ -34,7 +35,7 @@ try {
   DateTime now = DateTime.parse(datetime);
 //add hours and minutes to new datetime varibale
   now = now.add(Duration(hours: int.parse(hour), minutes: int.parse(min)));
-  time = now.toString();
+  time = DateFormat.jm().format(now);
 }
 catch (e) {
   print(" Error Occurd - $e");
