@@ -35,7 +35,7 @@ class _homeState extends State<home> {
               children: <Widget>[
                 Text(data['location'],
                 style: TextStyle(
-                  fontSize: 40.0,
+                  fontSize: 28.0,
                   letterSpacing: 2.0,
                 ),
                 ),
