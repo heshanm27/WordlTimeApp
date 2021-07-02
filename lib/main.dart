@@ -6,12 +6,12 @@ import 'package:worldtime/pages/loading.dart';
 
 void main() => runApp(MaterialApp(
 
-initialRoute: '/gps',
+initialRoute: '/',
     routes: {
-      // '/': (Context) => loading(),
-      // '/home':(Context) => home(),
-      // '/location':(Context) => location(),
-      '/gps':(Context) => gps(),
+     '/': (Context) => loading(),
+      '/home':(Context) => home(),
+       '/location':(Context) => location(),
+      //'/gps':(Context) => gps(),
     }
 
     ));

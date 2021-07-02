@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-
+import 'dart:async';
+import 'package:worldtime/services/worldtimeapi.dart';
 
 class home extends StatefulWidget {
   @override
@@ -8,12 +8,48 @@ class home extends StatefulWidget {
 }
 
 class _homeState extends State<home> {
+
   Map  data = {};
+
+  String location;
+  String timezone;
+
+
+
+
+  void callfuntion  ()async{
+
+    worldtime response =  worldtime(location: "$location",flagimg: "sds",url: "$timezone");
+    await response.getTime();
+      setState(() {
+        data['time'] = response.time;
+      });
+
+    print(" return time - $data['time']");
+  }
+
+
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    Timer mytimer = Timer.periodic(Duration(minutes: 1), (timer) {
+      setState(() {
+          callfuntion();
+        //returntime=time;
+
+      });
+    });
+  }
   @override
   Widget build(BuildContext context) {
 
     data = ModalRoute.of(context).settings.arguments;
-    print(data);
+    location =data['location'];
+    timezone =data['url'];
+    //time = data['time'];
+   // print(data);
     return Scaffold(
 
       body: SafeArea(child: Padding(

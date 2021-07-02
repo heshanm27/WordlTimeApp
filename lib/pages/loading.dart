@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:worldtime/services/worldtimeapi.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:worldtime/pages/gps.dart';
+import 'package:worldtime/services/gpslocation.dart';
 
 
 
@@ -13,16 +14,24 @@ class loading extends StatefulWidget {
 
 class _loadingState extends State<loading> {
 
-
+String timezone;
+String location;
 
 void setwordlTime() async{
-  worldtime response =  worldtime(location: "Colombo",flagimg: "sds",url: "Asia/Colombo");
+
+  gpsloation getlocation =  gpsloation(city: "loading",timez: "loading");
+  await getlocation.realloation();
+  timezone=  getlocation.timez;
+  location =  getlocation.city;
+
+  worldtime response =  worldtime(location: "$location",flagimg: "sds",url: "$timezone");
   await response.getTime();
  Navigator.pushReplacementNamed(context, '/home',arguments: {
 
     'location' : response.location,
     'flagimg' : response.flagimg,
-    'time':response.time
+    'time':response.time,
+    'url':response.url,
 
  });
 

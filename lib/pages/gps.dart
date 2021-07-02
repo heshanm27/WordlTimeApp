@@ -17,13 +17,15 @@ class _gpsState extends State<gps> {
   String location="k";
 
 
-
- Future<void>  realloation() async {
+//send latitude and longitude to api and get timezone and city
+Future<void>  realloation() async {
 
     await _getCurrentLocation();
 
     double dstOffset = _currentPosition.latitude;
     double rawOffset = _currentPosition.longitude;
+    print(dstOffset);
+    print(rawOffset);
     try {
 
       Response response = await get(
@@ -39,22 +41,23 @@ class _gpsState extends State<gps> {
       timez = timezone;
     }
     catch (e){
-      print(e);
+      print("error $e");
     }
 
 
 
   }
 
-  Future <void> _getCurrentLocation() {
-    Geolocator
+  //get latitude and longitude from device
+ Future<void> _getCurrentLocation() async{
+    await Geolocator
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
         .then((Position position) {
       setState(() {
         _currentPosition = position;
       });
     }).catchError((e) {
-      print(e);
+      print("eError from get urremnt loaation $e");
     });
   }
 
