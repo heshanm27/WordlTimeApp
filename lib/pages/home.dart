@@ -16,6 +16,7 @@ class _homeState extends State<home> {
   String timezone;
   String image;
   String color;
+  bool whattime;
 
 
   void callfuntion  ()async{
@@ -49,6 +50,7 @@ class _homeState extends State<home> {
     data = data.isNotEmpty?data : ModalRoute.of(context).settings.arguments;
     image = data['isDayTime']? 'day.jpg':'night.jpg' ;
     location =data['location'];
+    //whattime=data['isDayTime'];
     timezone =data['url'] ;
     Color bgcolor =data['isDayTime']?Colors.orange[600] : Colors.black54;
     //time = data['time'];
@@ -72,7 +74,13 @@ class _homeState extends State<home> {
             children: <Widget> [
               FlatButton.icon(
                 onPressed: () async {
-                  dynamic result = await Navigator.pushNamed(context, '/location');
+                  dynamic result = await Navigator.pushNamed(context, '/location',arguments:
+
+                  {
+                    'isDayTime':data['isDayTime'],
+                  }
+
+                  );
                   if(result != null){
                     setState(() {
                       data = {

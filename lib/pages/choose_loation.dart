@@ -8,6 +8,9 @@ class location extends StatefulWidget {
 
 class _locationState extends State<location> {
 
+
+  Map data ={};
+
   List<worldtime> locations = [
     worldtime(url: 'Europe/London', location: 'London', flagimg: 'uk.png'),
     worldtime(url: 'Europe/Berlin', location: 'Athens', flagimg: 'greece.png'),
@@ -37,9 +40,14 @@ class _locationState extends State<location> {
   }
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context).settings.arguments;
+
+    Color bgcolor =data['isDayTime']?Colors.orange[600] : Colors.deepPurple;
+
     return Scaffold(
+      backgroundColor: bgcolor,
       appBar: AppBar(
-        backgroundColor: Colors.black26,
+        backgroundColor: bgcolor,
         title: Text("Locations"),
         centerTitle: true,
         elevation: 0,
