@@ -10,16 +10,17 @@ class home extends StatefulWidget {
 class _homeState extends State<home> {
 
   Map  data = {};
+  Map data2={};
 
   String location;
   String timezone;
-
-
+  String image;
+  String color;
 
 
   void callfuntion  ()async{
 
-    worldtime response =  worldtime(location: "$location",flagimg: "sds",url: "$timezone");
+    worldtime response =  worldtime(location: "$location",flagimg: "",url: "$timezone");
     await response.getTime();
       setState(() {
         data['time'] = response.time;
@@ -37,7 +38,7 @@ class _homeState extends State<home> {
     Timer mytimer = Timer.periodic(Duration(minutes: 1), (timer) {
       setState(() {
           callfuntion();
-        //returntime=time;
+
 
       });
     });
@@ -45,52 +46,87 @@ class _homeState extends State<home> {
   @override
   Widget build(BuildContext context) {
 
-    data = ModalRoute.of(context).settings.arguments;
+    data = data.isNotEmpty?data : ModalRoute.of(context).settings.arguments;
+    image = data['isDayTime']? 'day.jpg':'night.jpg' ;
     location =data['location'];
-    timezone =data['url'];
+    timezone =data['url'] ;
+    Color bgcolor =data['isDayTime']?Colors.orange[600] : Colors.black54;
     //time = data['time'];
    // print(data);
     return Scaffold(
+  backgroundColor: bgcolor,
+      body: SafeArea
+        (child: Container(
+        decoration:BoxDecoration(
+          image: DecorationImage(image: AssetImage("assets/$image"),
 
-      body: SafeArea(child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 120.0, 0, 0),
-        child: Column(
+          fit: BoxFit.cover,
+          ),
 
-          children: <Widget> [
-            FlatButton.icon(onPressed: (){
-              Navigator.pushNamed(context,  '/location');
-            },
+        ) ,
+          child: Padding(
+          
+          padding: const EdgeInsets.fromLTRB(0, 150.0, 0, 0),
+          child: Column(
 
-                label: Text("Edit Location"),
-                icon: Icon(Icons.add_location),
+            children: <Widget> [
+              FlatButton.icon(
+                onPressed: () async {
+                  dynamic result = await Navigator.pushNamed(context, '/location');
+                  if(result != null){
+                    setState(() {
+                      data = {
+                        'time': result['time'],
+                        'location': result['location'],
+                        'isDayTime': result['isDayTime'],
+                        'flagimg': result['flagimg'],
+                        'url':result['url'],
+                      };
+                      image = data['isDayTime']? 'day.jpg':'night.jpg' ;
+                      location =data['location'];
+                      timezone =data['url'] ;
+                      Color bgcolor =data['isDayTime']?Colors.orange[600] : Colors.black54;
+                    });
+                  }
+              },
 
-            ),
-            SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(data['location'],
-                style: TextStyle(
-                  fontSize: 28.0,
-                  letterSpacing: 2.0,
-                ),
-                ),
-              ],
+                  label: Text("Edit Location",
+                  style: TextStyle(
+                    color:Colors.white,
+                  ),),
+                  icon: Icon(Icons.add_location
+                  ,color: Colors.white,),
 
-            ),
-            SizedBox(height: 20),
-            Text(data['time'],
-            style: TextStyle(
-              fontSize: 66.0,
-            ),
+              ),
+              SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(data['location'],
+                  style: TextStyle(
+                    fontSize: 28.0,
+                    letterSpacing: 2.0,
+                    color: Colors.white,
+                  ),
+                  ),
+                ],
 
-            )
-          ],
+              ),
+              SizedBox(height: 20),
+              Text(data['time'],
+              style: TextStyle(
+                fontSize: 66.0,
+                color: Colors.white,
+              ),
+
+              )
+            ],
 
 
 
-        ),
+          ),
       ),
+        ),
 
       ),
     );

@@ -32,6 +32,7 @@ void setwordlTime() async{
     'flagimg' : response.flagimg,
     'time':response.time,
     'url':response.url,
+   'isDayTime':response.isDayTime,
 
  });
 
