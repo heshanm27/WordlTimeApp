@@ -16,7 +16,10 @@ class _homeState extends State<home> {
   String timezone;
   String image;
   String color;
-  bool whattime;
+  int checked =0;
+  String location2;
+  String timezone2;
+
 
 
   void callfuntion  ()async{
@@ -30,31 +33,40 @@ class _homeState extends State<home> {
     print(" return time - $data['time']");
   }
 
+  void callfuntion2  ()async{
 
+    worldtime response =  worldtime(location: "$location2",flagimg: "",url: "$timezone2");
+    await response.getTime();
+    setState(() {
+      data2['time'] = response.time;
+    });
+
+    print(" return time - $data2['time']");
+  }
 
 
   @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
     Timer mytimer = Timer.periodic(Duration(minutes: 1), (timer) {
-      setState(() {
-          callfuntion();
-
+      setState(()  {
+           callfuntion();
+           checked != 0?
+        callfuntion2():null;
 
       });
     });
   }
   @override
   Widget build(BuildContext context) {
-
+    //chcek if data varibal is not empty if empty get data from loading page.if varival is not empty show data varibale
     data = data.isNotEmpty?data : ModalRoute.of(context).settings.arguments;
     image = data['isDayTime']? 'day.jpg':'night.jpg' ;
     location =data['location'];
-    //whattime=data['isDayTime'];
+
     timezone =data['url'] ;
     Color bgcolor =data['isDayTime']?Colors.orange[600] : Colors.black54;
-    //time = data['time'];
-   // print(data);
+
     return Scaffold(
   backgroundColor: bgcolor,
       body: SafeArea
@@ -83,17 +95,21 @@ class _homeState extends State<home> {
                   );
                   if(result != null){
                     setState(() {
-                      data = {
+                       data2 = {
                         'time': result['time'],
                         'location': result['location'],
                         'isDayTime': result['isDayTime'],
                         'flagimg': result['flagimg'],
                         'url':result['url'],
                       };
-                      image = data['isDayTime']? 'day.jpg':'night.jpg' ;
-                      location =data['location'];
-                      timezone =data['url'] ;
-                      Color bgcolor =data['isDayTime']?Colors.orange[600] : Colors.black54;
+
+                      location2 =data2['location'];
+                      timezone2 =data2['url'] ;
+
+                      checked +=1;
+
+
+
                     });
                   }
               },
@@ -127,7 +143,14 @@ class _homeState extends State<home> {
                 color: Colors.white,
               ),
 
-              )
+              ),
+
+              SizedBox(height: 40),
+              //Check if new location select or not
+              if(checked >0)
+
+                condition(data2)
+
             ],
 
 
@@ -139,4 +162,48 @@ class _homeState extends State<home> {
       ),
     );
   }
+}
+
+
+Widget condition(data2) {
+  String img = data2['isDayTime']? 'day.jpg':'night.jpg' ;
+  return Card(
+
+        margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+  child: Container(
+            decoration: BoxDecoration(
+            image: DecorationImage(
+            image: AssetImage("assets/$img"),
+            fit: BoxFit.cover,
+
+            ),
+            ),
+        child:
+          Column(
+              children: <Widget> [
+          Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget> [
+          Text(data2['location'],
+        style: TextStyle(
+          fontSize: 18.0,
+          letterSpacing: 2.0,
+          color: Colors.black54,
+        ),
+      ),
+        ]),
+        SizedBox(height: 20),
+        Text(data2['time'],
+        style: TextStyle(
+        fontSize: 36.0,
+        color: Colors.black54,
+  ),
+
+  )
+
+      ]),
+  ));
+
+
+
 }
